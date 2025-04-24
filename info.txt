@@ -1,0 +1,21 @@
+1. Create a app that has multiple roles like user, admin, sellers.
+2. Create a table for categories.
+3. Create a table for subcategories.
+4. Create a Product table.
+5. Create a filters tables like flipkart.
+6. Admin able to view all the products.
+7. Seller is able to view only his own products.
+8. User is able to view all seller’s product.
+9. Admin able to view all user of entire application.
+10. Admin able to view all the details of entire application. (like
+categories, subcategories)
+11. Manage cart.
+12. Manage order.
+Notes: -
+Manages all the API’s with Scribe
+(https://scribe.knuckles.wtf/nodejs).
+Use uuid and slug is compulsory.
+Use Proper naming convention.
+REFERNCE LINK FOR
+https://www.tutorialspoint.com/nodejs/nodejs_restful_api.htm#\
+
