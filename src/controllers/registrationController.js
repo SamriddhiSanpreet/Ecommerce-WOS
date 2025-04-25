@@ -38,7 +38,17 @@ module.exports.registerUser = async(req,res)=>{
 
 module.exports.getRegisteredUser = async(req,res)=>{
     try{
-        const registeredUser = await db.Registration.findAll();
+        const userRole = req.user.role ? req.user.role.name : null; 
+        const userId = req.user.id;
+        let registeredUser;
+        if (userRole === 'admin') {
+            registeredUser = await db.Registration.findAll();
+        }
+        else{
+            registeredUser = await db.Registration.findOne({
+                where: { id: userId }
+            });
+        }
         if(registeredUser){
             return res.status(200).json({msg:"Registered User Has Been Successfully Fetched !!",registeredUser})
         }
@@ -53,18 +63,23 @@ module.exports.getRegisteredUser = async(req,res)=>{
 
 module.exports.deleteRegisteredUser = async(req,res)=>{
     try{
-        const getRegisteredUser = await db.Registration.findByPk(req.params.id);
-        if(!getRegisteredUser){
-            return res.status(400).json({msg:"User not found !!"});
+        const requestedId = req.params.id;
+        const userId = req.user.id;
+        if(userId != requestedId){
+            return res.status(403).json({msg:"Access denied !! You can only delete your own account !"});
         }
-        if(getRegisteredUser.profileImage){
-            const imagePath = path.join(__dirname, '..','uploads', getRegisteredUser.profileImage);
-            fs.unlinkSync(imagePath);
-        }
-        await getRegisteredUser.destroy();
-        return res.status(200).json({msg:"User Has Been Successfully Deleted !!",getRegisteredUser})
+            const getRegisteredUser = await db.Registration.findByPk(requestedId);
+            if(!getRegisteredUser){
+                return res.status(400).json({msg:"User not found !!"});
+            }
+            if(getRegisteredUser.profileImage){
+                const imagePath = path.join(__dirname, '..','uploads', getRegisteredUser.profileImage);
+                fs.unlinkSync(imagePath);
+            }
+            await getRegisteredUser.destroy();
+            return res.status(200).json({msg:"User Has Been Successfully Deleted !!",getRegisteredUser})
+            }
             
-    }
     catch(err){
         console.log(err);
     }
@@ -72,13 +87,21 @@ module.exports.deleteRegisteredUser = async(req,res)=>{
 
 module.exports.getSingleRegisteredUser = async(req,res)=>{
     try{
-        let getSpecificRegisteredUser = await db.Registration.findByPk(req.params.id);
-        if(getSpecificRegisteredUser){
-            return res.status(200).json({msg:"Specific Registration Has Been Successfully Fetched !!",getSpecificRegisteredUser})
+        const userRole = req.user.role ? req.user.role.name : null; 
+        const userId = req.user.id;
+        if(userRole === 'admin'){
+            let getSpecificRegisteredUser = await db.Registration.findByPk(req.params.id);
+            if(getSpecificRegisteredUser){
+                return res.status(200).json({msg:"Specific Registration Has Been Successfully Fetched !!",getSpecificRegisteredUser})
+            }
+            else{
+                return res.status(500).json({msg:"Something Went Wrong during fetching the specific getSpecificRegisteredUser !!"});
+            }
         }
         else{
-            return res.status(500).json({msg:"Something Went Wrong during fetching the specific getSpecificRegisteredUser !!"});
+            return res.status(403).json({ msg: "Access denied !! Only Admin Can View this !!" });
         }
+        
     }
     catch(err){
         console.log(err);
