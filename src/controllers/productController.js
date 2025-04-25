@@ -42,10 +42,10 @@ module.exports.getProducts = async(req,res)=>{
             products = await db.Product.findAll({ where: { sellerId: userId } });
         }
         else if (userRole === 'user') {
-            const sellerRole = await db.Role.findOne({ where: { name: 'seller' } }); // 👈 FIXED
+            const sellerRole = await db.Role.findOne({ where: { name: 'seller' } }); 
             const sellers = await db.Registration.findAll({
                 where: {
-                    roleId: sellerRole.id // 👈 FIXED
+                    roleId: sellerRole.id 
                 }
             });
 
