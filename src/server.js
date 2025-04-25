@@ -9,13 +9,13 @@ app.use(morgan('combined'));
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(passport.initialize());
-require('./config/passport')(passport);
-app.use("/",require('./src/routes/roleRoute'));
-app.use("/",require('./src/routes/registrationRoute'));
-app.use("/",require('./src/routes/categoryRoute'));
-app.use("/",require('./src/routes/subcategoryRoute'));
-app.use("/",require('./src/routes/productRoute'));
-app.use("/",require('./src/routes/loginRoute'));
+require('../config/passport')(passport);
+app.use("/",require('./routes/roleRoute'));
+app.use("/",require('./routes/registrationRoute'));
+app.use("/",require('./routes/categoryRoute'));
+app.use("/",require('./routes/subcategoryRoute'));
+app.use("/",require('./routes/productRoute'));
+app.use("/",require('./routes/loginRoute'));
 
 if (process.env.RUN_MODE !== 'local') {
     // Production mode hai
@@ -24,6 +24,7 @@ if (process.env.RUN_MODE !== 'local') {
     // Local mode hai
     console.log("Local mode, safe to use local configs");
   }
+
 
 app.listen(port,(err)=>{
     if(err){

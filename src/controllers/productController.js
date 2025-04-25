@@ -6,7 +6,10 @@ const fs = require('fs');
 module.exports.createProduct = async(req,res)=>{
     try{
         // console.log(req.body);
-        
+        // console.log('BODY:', req.body);
+        // console.log('FILE:', req.file);
+
+        // throw new Error("sdsdsdsd")
         if (!req.body.name || !req.body.sellerId || !req.body.categoryId || !req.body.subcategoryId || !req.body.price || !req.body.stock) {
             return res.status(400).json({ msg: "All required fields must be filled!" });
         }
@@ -34,7 +37,7 @@ module.exports.createProduct = async(req,res)=>{
         
     }
     catch(err){
-        console.log(err);
+        return res.status(500).json({msg:"Something Went Wrong !!"})    
     }
 }
 

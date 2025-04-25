@@ -20,4 +20,6 @@ REFERNCE LINK FOR
 https://www.tutorialspoint.com/nodejs/nodejs_restful_api.htm#\
 
 
-
+-user's role jisme user chaahe to multiple roles play kr skta hai aur uska seperate table jisme saare data honge.
+-agar koi error aa rha hai to bhi image store ho jaa rhi hai .
+-jest.js
