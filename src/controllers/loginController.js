@@ -13,7 +13,7 @@ module.exports.login = async(req,res)=>{
         if (!match) return res.status(400).json({ msg: 'Wrong credentials' });
 
         const payload = { id: user.id, roleId: user.roleId };
-        const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1d' });
+        const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
 
         res.status(200).json({ msg: 'Login successful', token });
 
