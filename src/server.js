@@ -4,7 +4,10 @@ require('dotenv').config();
 const port = process.env.PORT;
 const morgan = require('morgan');
 const passport = require('passport');
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('../config/swagger');
 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use(morgan('combined'));
 app.use(express.json());
 app.use(express.urlencoded());
@@ -26,8 +29,7 @@ if (process.env.RUN_MODE !== 'local') {
   } else {
     // Local mode hai
     console.log("Local mode, safe to use local configs");
-  }
-
+}
 
 app.listen(port,(err)=>{
     if(err){
