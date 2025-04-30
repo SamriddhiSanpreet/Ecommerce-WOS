@@ -16,6 +16,9 @@ app.use("/",require('./routes/categoryRoute'));
 app.use("/",require('./routes/subcategoryRoute'));
 app.use("/",require('./routes/productRoute'));
 app.use("/",require('./routes/loginRoute'));
+app.use("/",require('./routes/filterRoute'));
+app.use("/",require('./routes/CartRoute'));
+app.use("/",require('./routes/orderRoute'));
 
 if (process.env.RUN_MODE !== 'local') {
     // Production mode hai

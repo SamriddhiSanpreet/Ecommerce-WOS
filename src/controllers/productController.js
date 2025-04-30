@@ -10,7 +10,12 @@ module.exports.createProduct = async(req,res)=>{
         // console.log('FILE:', req.file);
 
         // throw new Error("sdsdsdsd")
+        
         if (!req.body.name || !req.body.sellerId || !req.body.categoryId || !req.body.subcategoryId || !req.body.price || !req.body.stock) {
+            if (req.file) {
+                const filePath = path.join(__dirname, '..', 'uploads', req.file.filename);
+                fs.unlinkSync(filePath);
+            }
             return res.status(400).json({ msg: "All required fields must be filled!" });
         }
 
@@ -21,9 +26,22 @@ module.exports.createProduct = async(req,res)=>{
         const userRole = req.user.role ? req.user.role.name : null; 
         const userId = req.user.id;
 
+        const seller = await db.Registration.findByPk(req.body.sellerId,{
+            include:{
+                model:db.Role,
+                as:'role'
+            }
+        });
+
+        if (!seller) {
+            return res.status(400).json({ msg: "Seller not found with given ID!" });
+        }
+        if (seller.role.name !== 'seller' && seller.role.name !== 'admin') {
+            return res.status(400).json({ msg: "Provided ID does not belong to a seller or admin!" });
+        }
         if (userRole === "admin" || (userRole === "seller" && req.body.sellerId === userId)) {
 
-            const data = await db.Product.create(req.body,slug,image);
+            const data = await db.Product.create(req.body);
             if(data){
                 return res.status(200).json({msg:"Product Has Been Successfully Created !!",data})
             }
@@ -34,11 +52,21 @@ module.exports.createProduct = async(req,res)=>{
         else{
             return res.status(403).json({ msg: "Access denied" });
         }
-        
     }
     catch(err){
+        console.log(err);
+        if (req.file) {
+            try {
+                const filePath = path.join(__dirname, '..', '..', 'public', 'products_img', req.file.filename);
+                fs.unlinkSync(filePath);
+                console.log('Image deleted in catch block');
+            } catch (deleteError) {
+                console.log('Error while deleting file in catch block:', deleteError);
+            }
+        }
+        
         return res.status(500).json({msg:"Something Went Wrong !!"})    
-    }
+    }    
 }
 
 module.exports.getProducts = async(req,res)=>{
@@ -135,7 +163,7 @@ module.exports.updateProduct = async(req,res)=>{
             }
             if(req.file){
                 if(product.image){
-                    const oldImagePath = path.join(__dirname,'..','uploads',product.image);
+                    const oldImagePath = path.join(__dirname, '..', '..', 'public', 'products_img', product.image);
                     fs.unlinkSync(oldImagePath);
                 }
             }
@@ -149,6 +177,10 @@ module.exports.updateProduct = async(req,res)=>{
                 sellerId:req.body.sellerId || product.sellerId,
                 categoryId:req.body.categoryId || product.categoryId,
                 subcategoryId:req.body.subcategoryId || product.subcategoryId,
+                brand: req.body.brand || product.brand,
+                color: req.body.color || product.color,
+                size: req.body.size || product.size,
+                material: req.body.material || product.material
             }
             await product.update(updateData);
             res.status(200).json({msg:"Product Has Been Successfully Updated !!",product})
@@ -156,5 +188,16 @@ module.exports.updateProduct = async(req,res)=>{
     }
     catch(err){
         console.log(err);
+        if (req.file) {
+            try {
+                const filePath = path.join(__dirname, '..', '..', 'public', 'products_img', req.file.filename);
+                fs.unlinkSync(filePath);
+                console.log('Image deleted in catch block');
+            } catch (deleteError) {
+                console.log('Error while deleting file in catch block:', deleteError);
+            }
+        }
+        
+        return res.status(500).json({msg:"Something Went Wrong !!"})   
     }
 }

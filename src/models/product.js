@@ -88,6 +88,22 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true
     },
+    brand: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    color: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    size: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    material: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
     createdAt: {
       allowNull: false,
       type: DataTypes.DATE,
