@@ -15,12 +15,11 @@ const options = {
       },
     ],
   },
-  apis: [path.join(__dirname, '../src/routes/*.js')], // ✅ Corrected path
+  apis: [path.join(__dirname, '../src/routes/*.js')],
 };
 
 const swaggerSpec = swaggerJSDoc(options);
 
-// Optional debug log
 console.log('Loaded Swagger Paths:', Object.keys(swaggerSpec.paths));
 
 module.exports = swaggerSpec;

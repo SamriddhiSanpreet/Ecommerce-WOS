@@ -1,7 +1,7 @@
 const multer = require('multer');
 const path = require('path');
 
-// Absolute path for public folder
+// Path for public folder
 const publicPath = path.join(__dirname, '..','..', 'public');
 
 // Storage for registration images

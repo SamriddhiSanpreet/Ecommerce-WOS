@@ -42,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     phone: {
-      type: DataTypes.STRING,     //db.driver
+      type: DataTypes.STRING,     //db.driver topic research krna hai
       allowNull: true
     },
     address: {
