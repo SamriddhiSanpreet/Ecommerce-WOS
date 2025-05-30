@@ -3,6 +3,7 @@ const slugify = require('slugify');
 
 module.exports.createCategory = async(req,res)=>{
     try{
+        //
         // console.log(req.body);
         const slug = slugify(req.body.name,{lower:true});
         const categoryData = {
